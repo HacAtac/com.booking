@@ -18,9 +18,8 @@ public class Review {
     private Long id;
     private String text;
     private int rating;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "serviceID", nullable = false)
-    private Service service;
-
+    private Services service;
 }
 
