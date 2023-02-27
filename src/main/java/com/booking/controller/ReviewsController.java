@@ -21,7 +21,7 @@ public class ReviewsController {
         this.reviewsService = reviewsService;
     }
 
-    @PostMapping("/{serviceId}")
+    @PostMapping("/service/{serviceId}")
     @ResponseStatus(HttpStatus.CREATED)
     public ReviewDTO createReview(@PathVariable Long serviceId, @RequestBody ReviewDTO reviewDTO) {
         Review createdReview = reviewsService.createReview(serviceId, reviewDTO);

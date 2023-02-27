@@ -47,10 +47,13 @@ public class ReviewsService {
     }
 
     public void deleteReview(Long id) {
-        Review review = reviewRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Review", id));
-        reviewRepository.delete(review);
+       Review review = toReview(getReviewById(id));
+       if(review == null || review.getId() == null) {
+           throw new EntityNotFoundException("Review", id);
+         }
+         reviewRepository.delete(review);
     }
+
 
     public List<ReviewDTO> toReviewDTOs(List<Review> reviews) {
         return reviews.stream().map(this::toReviewDTO).collect(Collectors.toList());
