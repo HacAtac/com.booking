@@ -9,6 +9,7 @@ import com.booking.repository.ReviewRepository;
 import com.booking.repository.ServicesRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,11 +57,14 @@ public class ServicesService {
         return servicesRepository.save(existingService);
     }
 
+    @Transactional
     public void deleteService(Long id) {
         Services service = servicesRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Service", id));
-        reviewRepository.deleteByServiceId(id);
+        //iterate through reviews and delete them if there is any attached to the service
+        reviewRepository.findByServiceId(id).forEach(reviewRepository::delete);
         servicesRepository.delete(service);
+
     }
 
 
