@@ -5,6 +5,7 @@ import com.booking.payload.ReviewDTO;
 import com.booking.service.ReviewsService;
 import com.booking.service.ServicesService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,12 +36,14 @@ public class ReviewsController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ReviewDTO updateReview(@PathVariable Long id, @RequestBody ReviewDTO reviewDTO) {
         Review updatedReview = reviewsService.updateReview(id, reviewDTO);
         return reviewsService.toReviewDTO(updatedReview);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteReview(@PathVariable Long id) {
         reviewsService.deleteReview(id);
     }

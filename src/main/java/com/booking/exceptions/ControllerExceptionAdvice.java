@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ControllerExceptionAdvice {
     private static final Logger LOGGER = LoggerFactory.getLogger(ControllerExceptionAdvice.class);
 
+    @ExceptionHandler(ServiceNotFoundException.class)
+    public ResponseEntity<MessageResponse> serviceNotFoundException(ServiceNotFoundException serviceNotFoundException){
+        LOGGER.error("Error occurred: {}", serviceNotFoundException.getMessage());
+        return ResponseEntity.status(404).body(new MessageResponse(404, serviceNotFoundException.getMessage(), "SNE404"));
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<MessageResponse> runtimeException(RuntimeException runtimeException){
         LOGGER.error("Error occurred: {}", runtimeException.getMessage());

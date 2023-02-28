@@ -3,8 +3,10 @@ package com.booking.service;
 import com.booking.entity.Review;
 import com.booking.entity.Services;
 import com.booking.exceptions.EntityNotFoundException;
+import com.booking.payload.MessageResponse;
 import com.booking.payload.ReviewDTO;
 import com.booking.repository.ReviewRepository;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +32,7 @@ public class ReviewsService {
         return toReviewDTO(review);
     }
 
-    public Review createReview(Long serviceId, ReviewDTO reviewDTO) {
+    public Review createReview(Long serviceId, ReviewDTO reviewDTO) throws ConstraintViolationException {
         Review review = toReview(reviewDTO);
         Services service = new Services();
         service.setId(serviceId);

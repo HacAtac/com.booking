@@ -7,6 +7,7 @@ import com.booking.payload.ServiceDTO;
 import com.booking.service.ReviewsService;
 import com.booking.service.ServicesService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,18 +45,21 @@ public class ServicesController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public ServiceDTO createService(@RequestBody ServiceDTO serviceDTO) {
         Services createdService = servicesService.createService(serviceDTO);
         return servicesService.toServiceDTO(createdService);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ServiceDTO updateService(@PathVariable Long id, @RequestBody ServiceDTO serviceDTO) {
         Services updatedService = servicesService.updateService(id, serviceDTO);
         return servicesService.toServiceDTO(updatedService);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteService(@PathVariable Long id) {
         servicesService.deleteService(id);
     }
