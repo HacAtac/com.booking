@@ -3,13 +3,16 @@ package com.booking.service;
 import com.booking.entity.Review;
 import com.booking.entity.Services;
 import com.booking.exceptions.EntityNotFoundException;
+import com.booking.exceptions.ServiceNotFoundException;
 import com.booking.payload.MessageResponse;
 import com.booking.payload.ReviewDTO;
 import com.booking.repository.ReviewRepository;
+import com.booking.repository.ServicesRepository;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,8 +20,11 @@ public class ReviewsService {
 
     private final ReviewRepository reviewRepository;
 
-    public ReviewsService(ReviewRepository reviewRepository) {
+    private final ServicesRepository serviceRepository;
+
+    public ReviewsService(ReviewRepository reviewRepository, ServicesRepository serviceRepository) {
         this.reviewRepository = reviewRepository;
+        this.serviceRepository = serviceRepository;
     }
 
     public List<ReviewDTO> getReviewsByServiceId(Long serviceId) {
@@ -32,7 +38,13 @@ public class ReviewsService {
         return toReviewDTO(review);
     }
 
-    public Review createReview(Long serviceId, ReviewDTO reviewDTO) throws ConstraintViolationException {
+    public Review createReview(Long serviceId, ReviewDTO reviewDTO) throws ServiceNotFoundException {
+
+        Optional<Services> optionalService = serviceRepository.findById(serviceId);
+        if (optionalService.isEmpty()) {
+            throw new ServiceNotFoundException("Service not found with id: " + serviceId);
+        }
+
         Review review = toReview(reviewDTO);
         Services service = new Services();
         service.setId(serviceId);
