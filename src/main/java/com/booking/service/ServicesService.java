@@ -1,5 +1,6 @@
 package com.booking.service;
 
+import com.booking.entity.Category;
 import com.booking.entity.Review;
 import com.booking.entity.Services;
 import com.booking.exceptions.ApiException;
@@ -8,8 +9,10 @@ import com.booking.exceptions.EntityNotFoundException;
 import com.booking.payload.MessageResponse;
 import com.booking.payload.ReviewDTO;
 import com.booking.payload.ServiceDTO;
+import com.booking.repository.CategoryRepository;
 import com.booking.repository.ReviewRepository;
 import com.booking.repository.ServicesRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -26,10 +29,18 @@ public class ServicesService {
 
     private ServicesRepository servicesRepository;
     private ReviewRepository reviewRepository;
+    private CategoryRepository categoryRepository;
 
-    public ServicesService(ServicesRepository servicesRepository, ReviewRepository reviewRepository) {
+    private ModelMapper modelMapper = new ModelMapper();
+
+    public ServicesService(ServicesRepository servicesRepository,
+                           ReviewRepository reviewRepository,
+                           CategoryRepository categoryRepository,
+                           ModelMapper modelMapper) {
         this.servicesRepository = servicesRepository;
         this.reviewRepository = reviewRepository;
+        this.categoryRepository = categoryRepository;
+        this.modelMapper = modelMapper;
     }
 
     public List<ServiceDTO> getAllServices() {
@@ -49,8 +60,11 @@ public class ServicesService {
     }
 
     public Services createService(ServiceDTO serviceDTO) {
+        Category category = categoryRepository.findById(serviceDTO.getCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException("Category", serviceDTO.getCategoryId()));
         // Check if the user has the role of admin
         Services service = toServiceEntity(serviceDTO);
+        service.setCategory(category);
         return servicesRepository.save(service);
     }
 
@@ -78,33 +92,14 @@ public class ServicesService {
 
 
     public ServiceDTO toServiceDTO(Services service) {
-        ServiceDTO serviceDTO = new ServiceDTO();
-        serviceDTO.setId(service.getId());
-        serviceDTO.setName(service.getName());
-        serviceDTO.setDescription(service.getDescription());
-        serviceDTO.setPrice(service.getPrice());
-        serviceDTO.setPhoto(service.getPhoto());
-        serviceDTO.setAdditionalPrice(service.getAdditionalPrice());
-        return serviceDTO;
+        return modelMapper.map(service, ServiceDTO.class);
     }
 
-    private ReviewDTO toReviewDTO(Review review) {
-        ReviewDTO reviewDTO = new ReviewDTO();
-        reviewDTO.setId(review.getId());
-        reviewDTO.setText(review.getText());
-        reviewDTO.setRating(review.getRating());
-        reviewDTO.setServiceId(review.getService().getId());
-        return reviewDTO;
+    public ReviewDTO toReviewDTO(Review review) {
+        return modelMapper.map(review, ReviewDTO.class);
     }
 
     private Services toServiceEntity(ServiceDTO serviceDTO) {
-        Services service = new Services();
-        service.setId(serviceDTO.getId());
-        service.setName(serviceDTO.getName());
-        service.setDescription(serviceDTO.getDescription());
-        service.setPrice(serviceDTO.getPrice());
-        service.setPhoto(serviceDTO.getPhoto());
-        service.setAdditionalPrice(serviceDTO.getAdditionalPrice());
-        return service;
+        return modelMapper.map(serviceDTO, Services.class);
     }
 }
