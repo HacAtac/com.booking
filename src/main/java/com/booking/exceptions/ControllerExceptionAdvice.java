@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,6 +30,12 @@ public class ControllerExceptionAdvice {
     public ResponseEntity<MessageResponse> serviceNotFoundException(ServiceNotFoundException serviceNotFoundException){
         LOGGER.error("Error occurred: {}", serviceNotFoundException.getMessage());
         return ResponseEntity.status(404).body(new MessageResponse(404, serviceNotFoundException.getMessage(), "SNE404"));
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<MessageResponse> usernameNotFoundException(UsernameNotFoundException usernameNotFoundException){
+        LOGGER.error("Error occurred: {}", usernameNotFoundException.getMessage());
+        return ResponseEntity.status(404).body(new MessageResponse(404, usernameNotFoundException.getMessage(), "UNFE404"));
     }
 
     @ExceptionHandler(RuntimeException.class)
