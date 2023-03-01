@@ -16,6 +16,7 @@ public class ServiceDTO {
     private String price;
     private String photo;
     private String additionalPrice;
+    private Long categoryId;
     private List<ReviewDTO> reviews;
 }
 
