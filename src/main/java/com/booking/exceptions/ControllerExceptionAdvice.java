@@ -20,6 +20,15 @@ import java.nio.file.AccessDeniedException;
 public class ControllerExceptionAdvice {
     private static final Logger LOGGER = LoggerFactory.getLogger(ControllerExceptionAdvice.class);
 
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<MessageResponse> handleApplicationAPIException(ApiException applicationAPIException,
+                                                                         WebRequest webRequest){
+        LOGGER.error("Error occurred: {}", applicationAPIException.getMessage());
+        MessageResponse messageResponse = new MessageResponse(applicationAPIException.getStatus().value(),
+                applicationAPIException.getMessage(), applicationAPIException.getStatus().getReasonPhrase());
+        return ResponseEntity.status(applicationAPIException.getStatus()).body(messageResponse);
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<MessageResponse> accessDeniedException(AccessDeniedException accessDeniedException){
         LOGGER.error("Error occurred: {}", accessDeniedException.getMessage());

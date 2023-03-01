@@ -44,8 +44,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) ->
                         //authorize.anyRequest().authenticated())
                         authorize.antMatchers(HttpMethod.GET, "/api/**").permitAll()
-                                .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults());
+                                .antMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                                .anyRequest().authenticated());
 
         return http.build();
     }
