@@ -7,13 +7,14 @@ import com.booking.payload.ServiceDTO;
 import com.booking.service.ReviewsService;
 import com.booking.service.ServicesService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/services")
+@RequestMapping("/api/services")
 public class ServicesController {
 
     private  ServicesService servicesService;
@@ -22,6 +23,12 @@ public class ServicesController {
     public ServicesController(ServicesService servicesService, ReviewsService reviewsService) {
         this.servicesService = servicesService;
         this.reviewsService = reviewsService;
+    }
+
+    @GetMapping("/category/{id}")
+   public ResponseEntity<List<ServiceDTO>> getServicesByCategoryId(@PathVariable("id") Long categoryId) {
+        List<ServiceDTO> serviceDTOs = servicesService.getServicesByCategoryId(categoryId);
+        return ResponseEntity.ok(serviceDTOs);
     }
 
     @GetMapping

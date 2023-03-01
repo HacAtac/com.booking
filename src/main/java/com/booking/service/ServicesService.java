@@ -43,6 +43,14 @@ public class ServicesService {
         this.modelMapper = modelMapper;
     }
 
+    //get services by categoryId
+    public List<ServiceDTO> getServicesByCategoryId(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new EntityNotFoundException("Category", categoryId));
+        List<Services> services = servicesRepository.findByCategoryId(categoryId);
+        return services.stream().map(this::toServiceDTO).collect(Collectors.toList());
+    }
+
     public List<ServiceDTO> getAllServices() {
         List<Services> services = servicesRepository.findAll();
         return services.stream().map(this::toServiceDTO).collect(Collectors.toList());
