@@ -1,5 +1,6 @@
 package com.booking.controller;
 
+import com.booking.payload.JWTAuthResponse;
 import com.booking.payload.LoginDTO;
 import com.booking.payload.RegisterDTO;
 import com.booking.service.AuthService;
@@ -22,9 +23,13 @@ public class AuthController {
 
     //Login REST API
     @PostMapping(value = {"/login", "/signin"})
-    public ResponseEntity<String> login(@RequestBody LoginDTO loginDto) {
-        String response = authService.login(loginDto);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<JWTAuthResponse> login(@RequestBody LoginDTO loginDto) {
+        String token = authService.login(loginDto);
+
+        JWTAuthResponse jwtAuthResponse = new JWTAuthResponse();
+        jwtAuthResponse.setAccessToken(token);
+
+        return ResponseEntity.ok(jwtAuthResponse);
     }
 
     //Register REST API

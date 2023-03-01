@@ -15,9 +15,9 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    @Value("${app.jwt.secret}")
+    @Value("${app-jwt-secret}")
     private String jwtSecret;
-    @Value("${app.jwt.expirationDate}")
+    @Value("${app-jwt-expiration-milliseconds}")
     private long jwtExpirationDate;
 
     //genereate JWT token
