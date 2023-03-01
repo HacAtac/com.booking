@@ -71,12 +71,15 @@ public class ServicesService {
     public Services updateService(Long id, ServiceDTO serviceDTO) {
         Services existingService = servicesRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Service", id));
+        Category category = categoryRepository.findById(serviceDTO.getCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException("Category", serviceDTO.getCategoryId()));
         Services updatedService = toServiceEntity(serviceDTO);
         existingService.setName(updatedService.getName());
         existingService.setDescription(updatedService.getDescription());
         existingService.setPrice(updatedService.getPrice());
         existingService.setPhoto(updatedService.getPhoto());
         existingService.setAdditionalPrice(updatedService.getAdditionalPrice());
+        existingService.setCategory(category);
         return servicesRepository.save(existingService);
     }
 
