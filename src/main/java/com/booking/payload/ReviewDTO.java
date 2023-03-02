@@ -1,13 +1,14 @@
 package com.booking.payload;
+import com.booking.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @ApiModel(value = "ReviewDTO", description = "ReviewDTO")
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewDTO {
@@ -19,4 +20,6 @@ public class ReviewDTO {
     private int rating;
     @ApiModelProperty(value = "Review user id")
     private Long serviceId;
+    @ApiModelProperty(value = "User object")
+    private UserDTO user;
 }

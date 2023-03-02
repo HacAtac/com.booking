@@ -2,13 +2,18 @@ package com.booking.service;
 
 import com.booking.entity.Review;
 import com.booking.entity.Services;
+import com.booking.entity.User;
 import com.booking.exceptions.EntityNotFoundException;
 import com.booking.exceptions.ServiceNotFoundException;
 import com.booking.payload.MessageResponse;
 import com.booking.payload.ReviewDTO;
+import com.booking.payload.UserDTO;
 import com.booking.repository.ReviewRepository;
 import com.booking.repository.ServicesRepository;
+import com.booking.repository.UserRepository;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,11 +25,14 @@ public class ReviewsService {
 
     private final ReviewRepository reviewRepository;
 
+    private final UserRepository userRepository;
+
     private final ServicesRepository serviceRepository;
 
-    public ReviewsService(ReviewRepository reviewRepository, ServicesRepository serviceRepository) {
+    public ReviewsService(ReviewRepository reviewRepository, ServicesRepository serviceRepository, UserRepository userRepository) {
         this.reviewRepository = reviewRepository;
         this.serviceRepository = serviceRepository;
+        this.userRepository = userRepository;
     }
 
     public List<ReviewDTO> getReviewsByServiceId(Long serviceId) {
@@ -38,19 +46,23 @@ public class ReviewsService {
         return toReviewDTO(review);
     }
 
-    public Review createReview(Long serviceId, ReviewDTO reviewDTO) throws ServiceNotFoundException {
+    public Review createReview(Long serviceId, ReviewDTO reviewDTO, Authentication authentication) throws ServiceNotFoundException {
+        String username = authentication.getName();
+        User user = userRepository.findByUsernameOrEmail(username, username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
-        Optional<Services> optionalService = serviceRepository.findById(serviceId);
-        if (optionalService.isEmpty()) {
-            throw new ServiceNotFoundException("Service not found with id: " + serviceId);
-        }
+        Services service = serviceRepository.findById(serviceId)
+                .orElseThrow(() -> new ServiceNotFoundException("Service not found with id: " + serviceId));
 
-        Review review = toReview(reviewDTO);
-        Services service = new Services();
-        service.setId(serviceId);
+        Review review = new Review();
+        review.setText(reviewDTO.getText());
+        review.setRating(reviewDTO.getRating());
+        review.setUser(user);
         review.setService(service);
+
         return reviewRepository.save(review);
     }
+
 
     public Review updateReview(Long id, ReviewDTO reviewDTO) {
         Review review = reviewRepository.findById(id)
@@ -79,6 +91,16 @@ public class ReviewsService {
         reviewDTO.setText(review.getText());
         reviewDTO.setRating(review.getRating());
         reviewDTO.setServiceId(review.getService().getId());
+
+        User user = review.getUser();
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setName(user.getName());
+        userDTO.setRoles(user.getRoles());
+
+        reviewDTO.setUser(userDTO);
         return reviewDTO;
     }
 

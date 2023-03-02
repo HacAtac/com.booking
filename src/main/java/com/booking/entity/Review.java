@@ -21,5 +21,8 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "serviceID", nullable = false)
     private Services service;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }
 

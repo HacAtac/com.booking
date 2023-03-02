@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,8 +29,8 @@ public class ReviewsController {
     @ApiOperation(value = "Create review REST API", notes = "Create review REST API", response = ReviewDTO.class)
     @PostMapping("/service/{serviceId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ReviewDTO createReview(@PathVariable Long serviceId, @RequestBody ReviewDTO reviewDTO) {
-        Review createdReview = reviewsService.createReview(serviceId, reviewDTO);
+    public ReviewDTO createReview(@PathVariable Long serviceId, @RequestBody ReviewDTO reviewDTO, Authentication authentication) {
+        Review createdReview = reviewsService.createReview(serviceId, reviewDTO, authentication);
         return reviewsService.toReviewDTO(createdReview);
     }
 
