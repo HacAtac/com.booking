@@ -12,6 +12,7 @@ import com.booking.repository.ReviewRepository;
 import com.booking.repository.ServicesRepository;
 import com.booking.repository.UserRepository;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -79,6 +80,17 @@ public class ReviewsService {
          }
          reviewRepository.delete(review);
     }
+
+    //checks if the user is the owner of the review. Useful for allowing users to delete/update their own reviews
+    public boolean isReviewOwner(Authentication authentication, Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new EntityNotFoundException("Review", reviewId));
+        String username = authentication.getName();
+        User user = userRepository.findByUsernameOrEmail(username, username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+        return review.getUser().getId().equals(user.getId());
+    }
+
 
 
     public List<ReviewDTO> toReviewDTOs(List<Review> reviews) {

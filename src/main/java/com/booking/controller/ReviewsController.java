@@ -43,7 +43,7 @@ public class ReviewsController {
 
     @ApiOperation(value = "Get all reviews REST API", notes = "Get all reviews REST API", response = ReviewDTO.class, responseContainer = "List")
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or @reviewsService.isReviewOwner(authentication, #id)")
     public ReviewDTO updateReview(@PathVariable Long id, @RequestBody ReviewDTO reviewDTO) {
         Review updatedReview = reviewsService.updateReview(id, reviewDTO);
         return reviewsService.toReviewDTO(updatedReview);
@@ -51,7 +51,7 @@ public class ReviewsController {
 
     @ApiOperation(value = "Delete review REST API", notes = "Delete review REST API")
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or @reviewsService.isReviewOwner(authentication, #id)")
     public void deleteReview(@PathVariable Long id) {
         reviewsService.deleteReview(id);
     }
