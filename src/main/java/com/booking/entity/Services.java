@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
@@ -19,9 +20,10 @@ public class Services {
     private Long id;
     private String name;
     private String description;
-    private String price;
+    private BigDecimal price;
     private String photo;
-    private String additionalPrice;
+    private BigDecimal additionalPrice;
+    private int maxTime;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
