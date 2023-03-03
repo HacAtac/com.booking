@@ -1,6 +1,6 @@
 package com.booking.controller;
 
-import com.booking.payload.JWTAuthResponse;
+import com.booking.response.JWTAuthResponse;
 import com.booking.payload.LoginDTO;
 import com.booking.payload.RegisterDTO;
 import com.booking.service.AuthService;
