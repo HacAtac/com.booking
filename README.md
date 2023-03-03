@@ -4,8 +4,8 @@ Service Booking API. Useful for business owners that provide services and need a
   <li>Services(Complete)</li>
   <li>Reviews(Complete)</li>
   <li>User-Auth(Complete)</li>
-  <li>Availability(TODO)</li>
-  <li>Appointment(TODO)</li>
+  <li>Availability(In Progress)</li>
+  <li>Appointment(In Progress)</li>
   <li>Payment(TODO)</li>
   <li>More To Come</li>
 </ul>
