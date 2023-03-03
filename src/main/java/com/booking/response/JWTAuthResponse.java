@@ -1,4 +1,4 @@
-package com.booking.payload;
+package com.booking.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

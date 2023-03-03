@@ -5,20 +5,16 @@ import com.booking.entity.Services;
 import com.booking.entity.User;
 import com.booking.exceptions.EntityNotFoundException;
 import com.booking.exceptions.ServiceNotFoundException;
-import com.booking.payload.MessageResponse;
 import com.booking.payload.ReviewDTO;
 import com.booking.payload.UserDTO;
 import com.booking.repository.ReviewRepository;
 import com.booking.repository.ServicesRepository;
 import com.booking.repository.UserRepository;
-import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
