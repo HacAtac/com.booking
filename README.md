@@ -1,5 +1,5 @@
 # service_booking_api
-Service Booking API. Useful for business owners that provide services and need a way to dynamically show services, show availability, allows appointment booking, and payments. This is in development, so far as of 3/1/2022 I've got services, reviews, user auth, categories completed. And have started on the logic for Booking, Appointments, and Payments. I'm still trying to plan out how I want to handle the flow for them so taking my time.
+Service Booking API. Useful for business owners that provide services and need a way to dynamically show services, show availability, allows appointment booking, and payments. This is in development, so far as of 04/28/23 I've got services, reviews, user auth, categories completed. And have started on the logic for Booking, Appointments, and Payments. I'm still trying to plan out how I want to handle the flow for them so taking my time. I did however feel the need to implement chat gpt api with this api with admin only auth until i get started with this again 
 
 <ul>
   <li>Services(Complete)</li>
