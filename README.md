@@ -5,7 +5,7 @@ Service Booking API. Useful for business owners that provide services and need a
   <li>Services(Complete)</li>
   <li>Reviews(Complete)</li>
   <li>User-Auth(Complete)</li>
-  <li>Chat Gpt Admin Endpoint</>
+  <li>Chat Gpt Admin Endpoint(Complete)</>
   <li>Availability(In Progress)</li>
   <li>Appointment(In Progress)</li>
   <li>Payment(TODO)</li>
