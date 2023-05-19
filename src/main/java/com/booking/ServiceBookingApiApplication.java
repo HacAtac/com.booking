@@ -14,7 +14,6 @@ public class ServiceBookingApiApplication {
 
 
 	public static void main(String[] args) {
-		// Read the .env file (specify the path to your .env file here)
 		Map<String, String> envVariables = DotEnvReader.readEnvFile(".env");
 		apiKey = envVariables.get("app-openai-api-key"); // Set the value of the API key
 		SpringApplication.run(ServiceBookingApiApplication.class, args);
